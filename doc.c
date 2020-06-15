@@ -24,9 +24,9 @@ const Doc DOCS[9] = {
     {"Javascript", "https://developer.mozilla.org/en-US/", "https://developer.mozilla.org/en-US/search?q="},
     {"Java", "https://docs.oracle.com/en/java/javase/14/docs/api/index.html", "https://docs.oracle.com/en/java/javase/14/docs/api/index.html"},
     {"Python", "https://docs.python.org/3/", "https://docs.python.org/3/search.html?check_keywords=yes^&area=default^&q="},
-    {"C", "https://devdocs.io/c/", "https://devdocs.io/c/"},
-    {"C++", "https://devdocs.io/cpp/", "https://devdocs.io/cpp/"},
-    {"Cpp", "https://devdocs.io/cpp/", "https://devdocs.io/cpp/"}
+    {"C", "https://en.cppreference.com/w/c/language", "https://en.cppreference.com/w/c/language"},
+    {"C++", "https://en.cppreference.com/w/cpp/language", "https://en.cppreference.com/w/cpp/language"},
+    {"Cpp", "https://en.cppreference.com/w/cpp/language", "https://en.cppreference.com/w/cpp/language"}
 };
 
 
