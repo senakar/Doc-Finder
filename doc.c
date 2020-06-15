@@ -7,6 +7,7 @@
 
 #define MAX_SIZE 200
 #define BUFF_SIZE 500
+#define ID_LEN 20
 #define GET_SIZE(arr) sizeof(arr) / sizeof(arr[0])
 
 // A representation of a languages documenttation links
@@ -14,21 +15,41 @@ typedef struct {
     char* name;
     char* url;
     char* search_url;
+    char* secondary_url;
 } Doc;
 
 
 const Doc DOCS[9] = {
-    {"Racket", "https://docs.racket-lang.org/", "https://docs.racket-lang.org/search/index.html?q="},
-    {"Elixir", "https://hexdocs.pm/elixir/Kernel.html", "https://hexdocs.pm/elixir/search.html?q="},
-    {"Rust", "https://doc.rust-lang.org/std/index.html", "https://doc.rust-lang.org/std/index.html?search="},
-    {"Javascript", "https://developer.mozilla.org/en-US/", "https://developer.mozilla.org/en-US/search?q="},
-    {"Java", "https://docs.oracle.com/en/java/javase/14/docs/api/index.html", "https://docs.oracle.com/en/java/javase/14/docs/api/index.html"},
-    {"Python", "https://docs.python.org/3/", "https://docs.python.org/3/search.html?check_keywords=yes^&area=default^&q="},
-    {"C", "https://en.cppreference.com/w/c/language", "https://en.cppreference.com/w/c/language"},
-    {"C++", "https://en.cppreference.com/w/cpp/language", "https://en.cppreference.com/w/cpp/language"},
-    {"Cpp", "https://en.cppreference.com/w/cpp/language", "https://en.cppreference.com/w/cpp/language"}
+    {"Racket", "https://docs.racket-lang.org/", "https://docs.racket-lang.org/search/index.html?q=", NULL},
+    {"Elixir", "https://hexdocs.pm/elixir/Kernel.html", "https://hexdocs.pm/elixir/search.html?q=", NULL},
+    {"Rust", "https://doc.rust-lang.org/std/index.html", "https://doc.rust-lang.org/std/index.html?search=", NULL},
+    {"Javascript", "https://developer.mozilla.org/en-US/", "https://developer.mozilla.org/en-US/search?q=", NULL},
+    {"Java", "https://docs.oracle.com/en/java/javase/14/docs/api/index.html", "https://docs.oracle.com/en/java/javase/14/docs/api/index.html", NULL},
+    {"Python", "https://docs.python.org/3/", "https://docs.python.org/3/search.html?check_keywords=yes^&area=default^&q=", NULL},
+    {"C", "https://en.cppreference.com/w/c/language", "https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch^&search=", "https://en.cppreference.com/w/c/language/"},
+    {"C++", "https://en.cppreference.com/w/cpp/language", "https://en.cppreference.com/w/cpp/language", NULL},
+    {"Cpp", "https://en.cppreference.com/w/cpp/language", "https://en.cppreference.com/w/cpp/language", NULL}
 };
 
+char identifiers[17][ID_LEN] = {
+    "break",
+    "const", 
+    "continue",
+    "do",
+    "enum",
+    "extern",
+    "for", 
+    "goto",
+    "if", 
+    "return",
+    "sizeof",
+    "struct",
+    "switch", 
+    "typedef",
+    "union",
+    "while",
+    "volatile"
+};
 
 // Determines if two string are the same ignoring cases
 static bool strcmpNoCase(const char *s1, const char* s2) {
@@ -68,6 +89,15 @@ static void openInBrowser(char* url) {
     exit(EXIT_SUCCESS);
 }
 
+static bool member(char* search, char array[][ID_LEN], int size) {
+    for(int i = 0; i < size; i++) {
+        if (strcmpNoCase (array[i], search)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 // checks if the inputted langauge is supported, if so then looks it up in the users
 //  browser.
@@ -79,6 +109,14 @@ void checkDocs(const char *lang, char *search) {
             if(strncmp(search, "", MAX_SIZE) == 0) {
                 openInBrowser(d->url);
             } else {
+                if (strncmp (d->name, "C", MAX_SIZE) == 0) {
+                    if(member(search, identifiers, GET_SIZE(identifiers))) {
+                        char url[MAX_SIZE] = "";
+                        strncat(url, d->secondary_url, MAX_SIZE);
+                        strncat(url, search, MAX_SIZE);
+                        openInBrowser(url);
+                    }
+                }
                 char url[MAX_SIZE] = "";
                 strncat(url, d->search_url, MAX_SIZE);
                 strncat(url, search, MAX_SIZE);
